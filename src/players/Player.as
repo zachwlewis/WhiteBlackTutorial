@@ -1,9 +1,14 @@
 package players
 {	
 	import bullets.*;
+	
+	import flash.display.BitmapData;
+	
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	import net.flashpunk.Tween;
+	import net.flashpunk.graphics.Emitter;
+	import net.flashpunk.graphics.Graphiclist;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.tweens.misc.VarTween;
 	import net.flashpunk.utils.*;
@@ -14,15 +19,25 @@ package players
 			protected var g:Image;
 			protected var flipInTween:VarTween;
 			protected var flipOutTween:VarTween;
+			protected var explosionEmitter:Emitter;
 			protected const FLIP_SPEED:Number = 0.5;
+			protected const EXPLOSION_SIZE:uint = 100;
+			
 			public function Player(x:Number=0, y:Number=0)
 			{
 				super(x, y);
 				g = new Image(GC.GFX_PLAYER);
 				g.originX = 6;
-				graphic = g;
 				flipInTween = new VarTween(onFlipInComplete, Tween.PERSIST);
 				flipOutTween = new VarTween(onFlipOutComplete, Tween.PERSIST);
+				explosionEmitter = new Emitter(new BitmapData(1,1),1,1);
+				// Define our particles
+				explosionEmitter.newType("explode",[0]);
+				explosionEmitter.setAlpha("explode",1,0);
+				explosionEmitter.setMotion("explode", 0, 50, 2, 360, -40, -0.5, Ease.quadOut);
+				
+				explosionEmitter.relative = false;
+				graphic = new Graphiclist(g, explosionEmitter);
 				
 				addTween(flipInTween);
 				addTween(flipOutTween);
@@ -49,12 +64,14 @@ package players
 				{
 					// The player is currently white.
 					g.color = 0;
+					explosionEmitter.setColor("explode", 0, 0);
 					currentBullet = BlackBullet;
 				}
 				else
 				{
 					// The player is currently black.
 					g.color = 0xffffff;
+					explosionEmitter.setColor("explode", 0xffffff, 0xffffff);
 					currentBullet = WhiteBullet;
 				}	
 			}
@@ -80,7 +97,18 @@ package players
 				if(this.collide(GC.TYPE_ENEMY, x, y))
 				{
 					// Dead.
-					this.world.remove(this);
+					collidable = false;
+					g.visible = false;
+					
+					for (var i:uint = 0; i < EXPLOSION_SIZE; i++)
+					{
+						explosionEmitter.emit("explode",x + width/2, y+ height/2);
+					}
+				}
+				
+				if(!collidable && explosionEmitter.particleCount == 0)
+				{
+					if(this.world != null) this.world.remove(this);
 				}
 				
 				super.update();
