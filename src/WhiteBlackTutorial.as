@@ -2,6 +2,7 @@ package
 {	
 	import net.flashpunk.Engine;
 	import net.flashpunk.FP;
+	import worlds.TitleWorld;
 	
 	public class WhiteBlackTutorial extends Engine
 	{
@@ -14,7 +15,7 @@ package
 		
 		override public function init():void
 		{
-			FP.world = new GameWorld();
+			FP.world = new TitleWorld();
 		}
 	}
 }

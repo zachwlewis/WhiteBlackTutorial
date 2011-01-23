@@ -1,4 +1,4 @@
-package
+package worlds
 {
 	import enemies.*;
 	
