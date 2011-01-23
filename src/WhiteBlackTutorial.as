@@ -4,6 +4,7 @@ package
 	import net.flashpunk.FP;
 	import worlds.TitleWorld;
 	
+	[SWF(width=320, height=600)]
 	public class WhiteBlackTutorial extends Engine
 	{
 		public function WhiteBlackTutorial()
