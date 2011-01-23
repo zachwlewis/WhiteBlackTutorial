@@ -26,10 +26,10 @@ package worlds
 			
 			
 			topTitle = addGraphic(new Image(GC.GFX_TITLE_TOP));
-			topTitle.y = -FP.screen.height;
+			topTitle.y = -FP.screen.height/2;
 			
 			bottomTitle = addGraphic(new Image(GC.GFX_TITLE_BOTTOM));
-			bottomTitle.y = FP.screen.height * 1.5;
+			bottomTitle.y = FP.screen.height;
 			
 			var topTween:VarTween = new VarTween(onBounceIn);
 			topTween.tween(topTitle,"y",0, 1.5, Ease.bounceOut);
