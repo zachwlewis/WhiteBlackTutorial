@@ -19,7 +19,7 @@ package bullets
 		override public function update():void
 		{
 			y -= FP.elapsed * GC.BULLET_SPEED;
-			if(y < -height) this.world.remove(this);
+			if(y < -height && this.world != null) this.world.remove(this);
 			super.update();
 		}
 		

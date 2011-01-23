@@ -1,4 +1,4 @@
 .actionScriptProperties
 .project
-.settings/*
-bin-debug/*
+.settings
+bin-debug
