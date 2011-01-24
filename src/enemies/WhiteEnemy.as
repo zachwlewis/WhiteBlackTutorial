@@ -13,7 +13,6 @@ package enemies
 		{
 			if(b.type == GC.TYPE_BLACK_BULLET)
 			{
-				this.world.remove(this);
 				this.getScore();
 			}
 			super.hit(b);
