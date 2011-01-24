@@ -22,6 +22,8 @@ package players
 			protected var explosionEmitter:Emitter;
 			protected const FLIP_SPEED:Number = 0.5;
 			protected const EXPLOSION_SIZE:uint = 100;
+			protected var fireRate:Number;
+			protected var fireTimer:Number;
 			
 			public function Player(x:Number=0, y:Number=0)
 			{
@@ -43,6 +45,10 @@ package players
 				addTween(flipOutTween);
 				this.setHitbox(12, 8);
 				currentBullet = WhiteBullet;
+				
+				// Define our auto-shoot propertites.
+				fireRate = 0.2;
+				fireTimer = 0;
 			}
 			
 			protected function onFlipInComplete():void
@@ -85,8 +91,19 @@ package players
 				if(Input.mousePressed && !flipInTween.active && !flipOutTween.active )
 				{
 					// Spawn our bullet.
+					fireTimer = 0;
 					this.world.add(new currentBullet(x + 5, y - 2));
 				}
+				else if(Input.mouseDown && !flipInTween.active && !flipOutTween.active)
+				{
+					fireTimer += FP.elapsed;
+					if(fireTimer > fireRate)
+					{
+						fireTimer -= fireRate;
+						this.world.add(new currentBullet(x + 5, y - 2));
+					}
+				}
+				
 				
 				if(Input.pressed(Key.Z) && !flipInTween.active && !flipOutTween.active)
 				{
